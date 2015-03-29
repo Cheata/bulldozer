@@ -1,0 +1,9 @@
+{
+  "name": "bulldozer",
+  "version": "1.0.0",
+  "title": "bulldozer",
+  "author": "Cheata",
+  "contact": "",
+  "description": "bulldozer for tearing up your base",
+  "dependencies": ["base >= 0.11.19"]
+} 
