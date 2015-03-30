@@ -51,11 +51,15 @@ local RED = {r = 0.9}
 local GREEN = {g = 0.7}
 local YELLOW = {r = 0.8, g = 0.8}
 
-local blacklist = {
-    car=true, locomotive=true, ["cargo-wagon"]=true, unit=true, tree=true,  ["stone-rock"]=true, ["item-on-ground"]=true,
+local blacklisttype = {
+    car=true, locomotive=true, ["cargo-wagon"]=true, unit=true, tree=true,
     ["unit-spawner"]=true, player=true, decorative=true, resource=true, smoke=true, explosion=true,
     corpse=true, particle=true, ["flying-text"]=true, projectile=true, ["particle-source"]=true, turret=true,
     sticker=true, ["logistic-robot"] = true, ["combat-robot"]=true, ["construction-robot"]=true, projectile=true
+  }
+  
+  local blacklistname = {
+    ["stone-rock"]=true, ["item-on-ground"]=true
   }
 
 BULL = {
@@ -124,9 +128,9 @@ BULL = {
       end
     end
     self:pickupItems(pos, area)
-    
+    self:blockprojectiles(pos,area)
     for _, entity in ipairs(game.findentities{{area[1][1],area[1][2]},{area[2][1],area[2][2]}}) do
-      if not blacklist[entity.type] then
+      if not blacklisttype[entity.type] and not blacklistname[entity.name] then
       
         for i=1,4,1 do
         --game.player.print(i)
@@ -158,6 +162,13 @@ BULL = {
           self:deactivate("Error (Storage Full)",true)
         end
       end
+    end
+  end,
+  
+      
+  blockprojectiles = function(self,pos, area)
+    for _, entity in ipairs(game.findentitiesfiltered{area = area, type="projectile"}) do
+      entity.destroy()
     end
   end,
 
