@@ -2,7 +2,7 @@ require "defines"
 require "bulldozer"
 require "GUI"
 
-remote.addinterface("buldozer",{})
+remote.addinterface("bulldozer",{})
   
 removeStone = true
 
