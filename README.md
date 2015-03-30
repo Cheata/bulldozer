@@ -6,10 +6,10 @@ adds a bulldozer to factorio
 
 
 Current features
--Removes structures and places them in bulldozers inventory 
--Picks up loose items on the ground
--Removes trees (adds wood to inventory)
--Removes rocks (adds stone to inventory)
+- Removes structures and places them in bulldozers inventory 
+- Picks up loose items on the ground
+- Removes trees (adds wood to inventory)
+- Removes rocks (adds stone to inventory)
 
 
 To use:
