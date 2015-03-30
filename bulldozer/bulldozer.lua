@@ -50,11 +50,13 @@ end
 local RED = {r = 0.9}
 local GREEN = {g = 0.7}
 local YELLOW = {r = 0.8, g = 0.8}
-local tent,ti
 
-function lazyerrorblock()
-  tmp=tent.getinventory(ti)
-end
+local blacklist = {
+    car=true, locomotive=true, ["cargo-wagon"]=true, unit=true, tree=true,  ["stone-rock"]=true, ["item-on-ground"]=true,
+    ["unit-spawner"]=true, player=true, decorative=true, resource=true, smoke=true, explosion=true,
+    corpse=true, particle=true, ["flying-text"]=true, projectile=true, ["particle-source"]=true, turret=true,
+    sticker=true, ["logistic-robot"] = true, ["combat-robot"]=true, ["construction-robot"]=true, projectile=true
+  }
 
 BULL = {
   new = function(player)
@@ -124,19 +126,12 @@ BULL = {
     self:pickupItems(pos, area)
     
     for _, entity in ipairs(game.findentities{{area[1][1],area[1][2]},{area[2][1],area[2][2]}}) do
-      if entity.type ~= "car" and entity.type ~= "train" and entity.type ~= "unit" and entity.type ~= "tree" and entity.name ~= "stone-rock" and entity.name ~= "item-on-ground" and entity.type ~= "unit-spawner" and entity.type ~= "player" and entity.type ~="decorative" and entity.type ~="resource" and entity.type~="smoke" and entity.type~="explosion" and entity.type ~= "corpse" and entity.type ~= "particle" and entity.type ~= "flying-text" and entity.type ~="projectile" and entity.type~="particle-source" and entity.type~="turret" then
+      if not blacklist[entity.type] then
       
         for i=1,4,1 do
-        tent=entity
-        ti=i
         --game.player.print(i)
-        if pcall(lazyerrorblock) then
-          inv=entity.getinventory(i)
-        else
-          inv=null
-          --game.player.print("error")
-        end
-        if inv ~= null then
+        local success, inv = pcall(function(e,i) return e.getinventory(i) end, entity,i)
+        if success then
           for k,v in pairs(inv.getcontents()) do
             if self:addItemToCargo(k,v) then
               self:removeItemFromTarget(entity,k,v,i)
