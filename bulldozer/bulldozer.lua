@@ -52,7 +52,7 @@ local GREEN = {g = 0.7}
 local YELLOW = {r = 0.8, g = 0.8}
 
 local blacklisttype = {
-    car=true, locomotive=true, ["cargo-wagon"]=true, unit=true, tree=true,
+    ["fish"]=true, car=true, locomotive=true, ["cargo-wagon"]=true, unit=true, tree=true,
     ["unit-spawner"]=true, player=true, decorative=true, resource=true, smoke=true, explosion=true,
     corpse=true, particle=true, ["flying-text"]=true, projectile=true, ["particle-source"]=true, turret=true,
     sticker=true, ["logistic-robot"] = true, ["combat-robot"]=true, ["construction-robot"]=true, projectile=true, ["ghost"]=true
