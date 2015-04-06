@@ -2,7 +2,12 @@ require "defines"
 require "bulldozer"
 require "GUI"
 
+
+
+
 remote.addinterface("bulldozer",{})
+
+
   
 removeStone = true
 
@@ -86,6 +91,10 @@ removeStone = true
       glob = {}
       glob.settings = {}
       glob.version = "0.0.1"
+    end
+    if remote.interfaces["roadtrain"] then
+      remote.call("roadtrain","settowbar","bulldozer",true)
+      remote.call("roadtrain","settowbar","car",false)
     end
     glob.bull = glob.bull or {}
     for i,bull in ipairs(glob.bull) do

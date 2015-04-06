@@ -217,6 +217,12 @@ BULL = {
   addItemToCargo = function(self,item, count)
     local count = count or 1
     local entity = self.vehicle
+    if remote.interfaces["roadtrain"] then
+      itemadded = remote.call("roadtrain","addtocargo",self.vehicle,item,count)
+      if itemadded then
+        return true
+      end
+    end
     if entity.getinventory(2).caninsert({name = item, count = count}) then
       entity.getinventory(2).insert({name = item, count = count})
       return true
