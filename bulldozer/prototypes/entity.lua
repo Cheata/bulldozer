@@ -101,8 +101,8 @@ data:extend(
       layers =
       {
         {
-          width = 139,
-          height = 110,
+          width = 158,
+          height = 128,
           frame_count = 2,
           axially_symmetrical = false,
           direction_count = 64,
@@ -134,29 +134,29 @@ data:extend(
           }
         },
         {
-          width = 109,
-          height = 88,
+          width = 95,
+          height = 77,
           frame_count = 2,
           apply_runtime_tint = true,
           axially_symmetrical = false,
           direction_count = 64,
-          shift = {-0.140625, -0.65625},
+          shift = {-0.100625, -0.46625},
           max_advance = 1,
           line_length = 2,
           stripes = util.multiplystripes(2,
           {
             {
-              filename = "__base__/graphics/entity/tank/base-mask-1.png",
+              filename = "__bulldozer__/graphics/entity/bulldozer/base-mask-1.png",
               width_in_frames = 1,
               height_in_frames = 22,
             },
             {
-              filename = "__base__/graphics/entity/tank/base-mask-2.png",
+              filename = "__bulldozer__/graphics/entity/bulldozer/base-mask-2.png",
               width_in_frames = 1,
               height_in_frames = 22,
             },
             {
-              filename = "__base__/graphics/entity/tank/base-mask-3.png",
+              filename = "__bulldozer__/graphics/entity/bulldozer/base-mask-3.png",
               width_in_frames = 1,
               height_in_frames = 20,
             },
