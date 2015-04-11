@@ -68,6 +68,7 @@ BULL = {
       vehicle = player.vehicle,
       driver=player, active=false
     }
+    new.settings = Settings.loadByPlayer(player)
     setmetatable(new, {__index=BULL})
     return new
   end,
@@ -76,6 +77,7 @@ BULL = {
     local i = BULL.findByVehicle(player.vehicle)
     if i then
       glob.bull[i].driver = player
+      glob.bull[i].settings = Settings.loadByPlayer(player)
     else
       table.insert(glob.bull, BULL.new(player))
     end
@@ -86,6 +88,7 @@ BULL = {
       if f.driver and f.driver.name == player.name then
         f:deactivate()
         f.driver = false
+        f.settings = false
         break
       end
     end
@@ -121,45 +124,58 @@ BULL = {
     --self:fillWater(area)
     
     for _, entity in ipairs(game.findentitiesfiltered{area = area, type = "tree"}) do
-      if self:addItemToCargo("raw-wood", 1) then
+      if self.settings.collect then
+        if self:addItemToCargo("raw-wood", 1) then
+          entity.die()
+        else
+          self:deactivate("Error (Storage Full)",true)
+        end
+      else 
         entity.die()
-      else
-        self:deactivate("Error (Storage Full)",true)
       end
     end
-    self:pickupItems(pos, area)
+    if self.settings.collect then
+      self:pickupItems(pos, area)
+    end
     self:blockprojectiles(pos,area)
     for _, entity in ipairs(game.findentities{{area[1][1],area[1][2]},{area[2][1],area[2][2]}}) do
       if not blacklisttype[entity.type] and not blacklistname[entity.name] then
-      
-        for i=1,4,1 do
-        --game.player.print(i)
-        local success, inv = pcall(function(e,i) return e.getinventory(i) end, entity,i)
-        if success then
-          for k,v in pairs(inv.getcontents()) do
-            if self:addItemToCargo(k,v) then
-              self:removeItemFromTarget(entity,k,v,i)
-             else
-              self:deactivate("Error (Storage Full)",true)
-             return
+        if self.settings.collect then
+          for i=1,4,1 do
+            --game.player.print(i)
+            local success, inv = pcall(function(e,i) return e.getinventory(i) end, entity,i)
+            if success then
+              for k,v in pairs(inv.getcontents()) do
+                if self:addItemToCargo(k,v) then
+                  self:removeItemFromTarget(entity,k,v,i)
+                 else
+                  self:deactivate("Error (Storage Full)",true)
+                 return
+                end
+              end
             end
           end
-         end
-       end
-        if self:addItemToCargo(entity.name, 1) then
-          entity.destroy()
+          if self:addItemToCargo(entity.name, 1) then
+            entity.destroy()
+          else
+            self:deactivate("Error (Storage Full)",true)
+          end
         else
-          self:deactivate("Error (Storage Full)",true)
+          entity.die()
         end
       end
     end
    
     if removeStone then
       for _, entity in ipairs(game.findentitiesfiltered{area = area, name = "stone-rock"}) do
-        if self:addItemToCargo("stone", 5) then
-          entity.die()
+        if self.settings.collect then
+          if self:addItemToCargo("stone", 5) then
+            entity.die()
+          else
+            self:deactivate("Error (Storage Full)",true)
+          end
         else
-          self:deactivate("Error (Storage Full)",true)
+          entity.die()
         end
       end
     end
@@ -167,7 +183,7 @@ BULL = {
   
       
   blockprojectiles = function(self,pos, area)
-    for _, entity in ipairs(game.findentitiesfiltered{area = area, type="projectile"}) do
+    for _, entity in ipairs(game.findentitiesfiltered{area = area, name="acid-projectile-purple"}) do
       entity.destroy()
     end
   end,

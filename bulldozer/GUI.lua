@@ -35,7 +35,7 @@ GUI = {
       end
       if bind then
         if e.type == "checkbox" then
-          e.state = GUI.bindings[e.name]
+          e.state = Settings.loadByPlayer(parent.gui.player)[e.name]
         end
       end
       local ret = parent.add(e)
@@ -52,13 +52,16 @@ GUI = {
       end
       return GUI.add(parent, e, bind)
     end,
-
+    
     createGui = function(player)
       if player.gui.left.bull ~= nil then return end
       local bull = GUI.add(player.gui.left, {type="frame", direction="vertical", name="bull"})
       local rows = GUI.add(bull, {type="table", name="rows", colspan=1})
       local buttons = GUI.add(rows, {type="table", name="buttons", colspan=3})
       GUI.addButton(buttons, {name="start"}, GUI.toggleStart)
+      
+      GUI.add(rows,{type="checkbox", name="collect",caption={"stg-collect"}},"collect")
+      
     end,
 
     destroyGui = function(player)
@@ -68,8 +71,12 @@ GUI = {
 
     onGuiClick = function(event, bull, player)
       local name = event.element.name
+      local psettings = Settings.loadByPlayer(player)
       if GUI.callbacks[name] then
         return GUI.callbacks[name](event, bull, player)
+      end
+      if name == "collect" then
+        psettings[name] = not psettings[name]
       end
     end,
 

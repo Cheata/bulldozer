@@ -1,4 +1,5 @@
 require "defines"
+require "Settings"
 require "bulldozer"
 require "GUI"
 
@@ -7,7 +8,9 @@ require "GUI"
 
 remote.addinterface("bulldozer",{})
 
-
+defaultSettings = {
+    collect = true
+  }
   
 removeStone = true
 
@@ -96,11 +99,25 @@ removeStone = true
       remote.call("roadtrain","settowbar","bulldozer",true)
       remote.call("roadtrain","settowbar","car",false)
     end
+    glob.players = glob.players or {}
     glob.bull = glob.bull or {}
+    glob.players={}
+    
+    if glob.version < "1.0.4" then
+      for pi, player in pairs(game.players) do
+        local settings = Settings.loadByPlayer(player)
+        settings = resetMetatable(settings,Settings)
+        settings:update(util.table.deepcopy(stg))
+      end
+    end
     for i,bull in ipairs(glob.bull) do
-    bull = resetMetatable(bull, BULL)
-    bull.index = nil
-   end
+      bull = resetMetatable(bull, BULL)
+      bull.index = nil
+    end
+    for name, s in pairs(glob.players) do
+      s = resetMetatable(s,Settings)
+    end
+    glob.version = "1.0.4"
   end
   
   local function oninit() initGlob() end
