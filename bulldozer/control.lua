@@ -126,6 +126,22 @@ removeStone = true
     initGlob()
   end
   
+  local function onentitydied(event)
+    if event.entity.name == "bulldozer" then
+      for i=#glob.bull,1,-1 do
+        if event.entity.equals(glob.bull[i].vehicle) then
+          if glob.bull[i].driver then
+            local gui = glob.bull[i].driver.gui
+            if gui.top.bull ~= nil then
+              gui.top.bull.destroy()
+            end
+          end
+          table.remove(glob.bull, i)
+        end
+      end
+    end
+  end
+  
   game.oninit(oninit)
   game.onload(onload)
   game.onevent(defines.events.ontick, onTick)
@@ -133,3 +149,4 @@ removeStone = true
   game.onevent(defines.events.onplayermineditem, onplayermineditem)
   game.onevent(defines.events.onpreplayermineditem, onpreplayermineditem)
   game.onevent(defines.events.onbuiltentity, onbuiltentity)
+  game.onevent(defines.events.onentitydied, onentitydied)

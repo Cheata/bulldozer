@@ -18,7 +18,6 @@ Settings = {
     if not glob.players[name] then
       glob.players[name] = settings
     end
-    game.player.print(name)
     glob.players[name].player = player
     setmetatable(glob.players[name], Settings)
     return glob.players[name]
